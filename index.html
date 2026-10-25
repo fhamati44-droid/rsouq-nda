@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>اتفاقية سرية RSOUQ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap">
+<style>
+/* Layout: one paper sheet (the contract) followed by a signing panel; the sheet is what gets exported. */
+:root{
+  --bg:#efeaee; --surface:#ffffff; --fg:#17212b; --muted:#5b6873; --line:#cfd6dc;
+  --accent:#6e295f; --accent-ink:#ffffff; --ok:#1d6b3a; --warn:#9a5b00; --err:#a3262b;
+  --paper:#ffffff; --ink:#141414; --ink-soft:#57505a; --rule:#e2dae0; --seal:#6e295f; --seal-tint:#f6eff4;
+  --f-doc:"Noto Naskh Arabic","Amiri","Traditional Arabic",serif;
+  --f-ui:"IBM Plex Sans Arabic","Segoe UI",Tahoma,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#161216; --surface:#211b20; --fg:#e4eaee; --muted:#9aa7b1; --line:#2f3b44;
+  --accent:#d29ac4; --accent-ink:#2a0f24; --ok:#6fcf92; --warn:#e3a94a; --err:#f08a8e; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#161216; --surface:#211b20; --fg:#e4eaee; --muted:#9aa7b1; --line:#2f3b44;
+  --accent:#d29ac4; --accent-ink:#2a0f24; --ok:#6fcf92; --warn:#e3a94a; --err:#f08a8e; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-ui);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 48px}
+.wrap{max-width:820px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}
+.top h1{font-size:1.05rem;font-weight:600;margin:0}
+.status{font-size:.82rem;padding:4px 10px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.status.done{color:var(--ok);border-color:currentColor}
+
+/* The sheet: always paper-white, so the exported copy is identical in any theme */
+.sheet{background:var(--paper);color:var(--ink);font-family:var(--f-doc);font-size:16.5px;line-height:1.95;
+  padding:48px clamp(20px,6vw,64px);border:1px solid var(--rule);box-shadow:0 1px 2px rgba(0,0,0,.06),0 8px 30px rgba(15,40,50,.08)}
+.letterhead{display:flex;align-items:center;gap:16px;padding-bottom:14px;margin-bottom:22px;border-bottom:3px solid var(--seal)}
+.letterhead img{width:76px;height:76px;flex:none}
+.lh-text{display:flex;flex-direction:column;min-width:0;line-height:1.5}
+.lh-brand{font-family:var(--f-ui);font-weight:700;font-size:1.35rem;color:var(--seal);letter-spacing:.02em}
+.lh-co{font-family:var(--f-ui);font-size:.8rem;color:var(--ink-soft)}
+.lh-tag{margin-inline-start:auto;font-family:var(--f-ui);font-size:.72rem;letter-spacing:.08em;color:var(--seal);border:1px solid var(--seal);padding:3px 10px;border-radius:999px;white-space:nowrap}
+.sheet-foot{margin-top:22px;padding-top:10px;border-top:3px solid var(--seal);display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px;font-family:var(--f-ui);font-size:.75rem;color:var(--ink-soft)}
+.sheet-foot b{color:var(--seal)}
+.sheet h3{background:var(--seal-tint);padding:2px 10px;border-inline-start:3px solid var(--seal)}
+@media (max-width:560px){.lh-tag{display:none}.letterhead img{width:60px;height:60px}}
+.sheet h2{font-size:1.55rem;text-align:center;margin:0;font-weight:700;text-wrap:balance}
+.sheet .sub{text-align:center;color:var(--ink-soft);margin:2px 0 18px}
+.sheet h3{font-size:1.08rem;margin:26px 0 6px;font-weight:700;color:var(--seal)}
+.sheet p{margin:6px 0}
+.sheet ol,.sheet ul{margin:6px 0;padding-inline-start:1.6em}
+.sheet li{margin:2px 0}
+.meta{display:grid;grid-template-columns:auto 1fr;gap:2px 14px;margin:6px 0 4px}
+.meta dt{color:var(--ink-soft)} .meta dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.ltr{direction:ltr;unicode-bidi:isolate;font-family:var(--f-ui);font-size:.92em}
+.fill{border-bottom:1px dotted var(--ink-soft);min-width:9em;display:inline-block;padding:0 4px}
+.fill.on{border-bottom-style:solid;font-weight:600}
+.dateline{text-align:center;margin-bottom:6px}
+.sigs{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:22px;border-top:1px solid var(--rule);padding-top:18px}
+.sigbox{display:flex;flex-direction:column;gap:2px;min-width:0}
+.sigbox h4{margin:0 0 4px;font-size:1rem}
+.sigimg{height:96px;border-bottom:1px solid var(--ink);display:flex;align-items:flex-end;justify-content:center}
+.sigimg img{max-height:92px;max-width:100%}
+.sigimg .ph{color:var(--ink-soft);font-size:.85rem;font-family:var(--f-ui);padding-bottom:6px}
+.small{font-size:.86rem;color:var(--ink-soft)}
+.proof{margin-top:20px;border-top:1px dashed var(--rule);padding-top:10px;font-family:var(--f-ui);font-size:.75rem;color:var(--ink-soft);line-height:1.6}
+@media (max-width:560px){.sigs{grid-template-columns:1fr}.sheet{font-size:15.5px;padding-block:32px}}
+
+/* Signing panel */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:22px;display:flex;flex-direction:column;gap:16px}
+.panel h2{margin:0;font-size:1.1rem}
+.panel .hint{margin:0;color:var(--muted);font-size:.9rem}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:560px){.grid{grid-template-columns:1fr}}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:.88rem;color:var(--muted)}
+input[type=text],input[type=tel]{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:9px 11px;width:100%}
+input:focus-visible,button:focus-visible,canvas:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.padwrap{display:flex;flex-direction:column;gap:6px}
+.padhead{display:flex;justify-content:space-between;align-items:center;font-size:.88rem;color:var(--muted)}
+canvas.pad{width:100%;height:180px;background:#fff;border:1px dashed var(--line);border-radius:6px;touch-action:none;cursor:crosshair;display:block}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:.92rem}
+.check input{margin-top:5px;width:18px;height:18px;accent-color:var(--accent)}
+.btns{display:flex;flex-wrap:wrap;gap:10px}
+button{font:inherit;cursor:pointer;border-radius:6px;padding:10px 18px;border:1px solid var(--line);background:transparent;color:var(--fg)}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+button:disabled{opacity:.5;cursor:not-allowed}
+button.link{border:none;padding:2px 4px;color:var(--accent);text-decoration:underline}
+.msg{font-size:.9rem;margin:0}
+.msg.err{color:var(--err)} .msg.ok{color:var(--ok)} .msg.warn{color:var(--warn)}
+.preview img{border:1px solid var(--line);width:100%;border-radius:4px}
+@media (prefers-reduced-motion:no-preference){button{transition:filter .15s}button:hover:not(:disabled){filter:brightness(1.08)}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="top">
+    <h1>اتفاقية عدم إفصاح · RSOUQ</h1>
+    <span class="status" id="status">بانتظار توقيع المستثمر</span>
+  </div>
+
+  <article class="sheet" id="sheet" dir="rtl" lang="ar">
+    <header class="letterhead">
+      <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwMDAgQDAwMEBAQFBgoGBgUFBgwICQcKDgwPDg4MDQ0PERYTDxAVEQ0NExoTFRcYGRkZDxIbHRsYHRYYGRj/2wBDAQQEBAYFBgsGBgsYEA0QGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBj/wAARCAFAAUADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD78ooooAKKKKACiiigAooooAKKKKACiimu6RxNJI6oijLMxwAPUmgB1FeMeO/2nfhj4MaWztNQbxFqSZX7NpZDopHZpT8o/DJ9q+b/ABl+1r8SvETyQaCbTw1ZtkAWi+bPj3lYcH/dAreGHnPod1DL61XVKy8z7q1PWNJ0Sya81nU7PT7cdZbuZYlH4sRXlPiL9qD4O+H3aJPEMurzL/yz0u3aUf8AfZwn61+f2r65rGvXzXuuate6lcNyZrudpW/Nias6H4S8VeKJvK8O+HNU1Rzx/ols8gH1YDA/E11LBxWs2elDJ6cVerL9D6p1v9tuwR3j8O+BLmb+7LqF2sf/AI6gb+dcFqn7Y/xRvGI07T/D+mqemy3eVh+LPj9KwdE/ZW+MmsIsk2hWmko3fULxFI/4Cm4/pXfaV+xR4kkVW1nxvpVqe62lq8+PxYrTthoF8mX0t7P8Tze8/ad+Nd2xz4wFuD2t7KBP/ZDWVL8fvjJK2W+IOrDP9wov8lr6HtP2JfDaAG/8d6tMe/kWscQ/UtWpF+xd8OUH73xH4lkPqJYR/wC06PbUFsvwD63gY7RX3HzHH8e/jHGcr8QtYP8AvMjfzWtO0/aW+NlocjxnJOPSe0gf/wBkr6Jk/Yu+HTf6vxH4lQ/9dIT/AO06zbz9ifwzID9h8c6vD6Ca2il/lto9tQe6/APrmBe8fwPL9K/bC+K1mwF/BoOpKOoltWjJ/FGH8q7zRP22UJVPEfgNhzzLp14D/wCOOB/6FWVqv7E/iGNWOi+OdNufRbu0eHP4qW/lXn2ufss/GTRdzwaFa6tGv8WnXaMT/wABfa36UWw8x8uX1drL8D6m8O/tS/B/X2SKbXLjRpm/g1O3aMA/767l/M16xpWt6NrtkLvRNWstRtzyJbSdZV/NSa/LPXPCfifwxP5XiLw/qelPnH+mWzxg/QkYP4VU0rV9V0K9W/0bU7vT7pTkTWkzRN+akUpYOL1gyJ5PTmr0pfqfrNRXwH4N/aw+KHhuSODWprXxLZDgrfLsmA9pV7/7wNfSPgX9qL4Z+MHis9RvH8N6i+B5GpkCJj6LMPl/7621yzw04dDzK+XV6WtrryPa6KbHLHNCssMiyRuNyuhyGHqD3p1YHCFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFc/4x8beGfAXhmXXvFOqRWNonChuXlb+4ijlm9hXxB8XP2nPFnj2WbSPDjT+H/DxypjifFxcj/po46A/3F49Sa2pUJVHodeFwVTEP3Vp3PpP4oftM+BvADTaXpcq+ItdTKm1tJB5ULeksvIB/2Rk/Svjv4h/G/wCIXxInkj1rWXttOY/LpdiTFbgf7Qzlz7sTXIeHvDPiDxdrsejeGtHutTvpORDbpu2j+8x6KPckCvq74bfsc2cCwan8TdRN1KAG/siwkKxg+kko5b6Lge5rt5KVDfc9pUsLgVeWsvx/4B8peHfCviPxdqg0zwxol7ql33itYi233Y9FHuSBX0R4I/Yz8S6isd3461230aI4Js7EC4nI9C5+RT9N1fYeg+HNB8L6PHpXh3SLPTLJBxBaxBF+px1Puea06wqYyT+HQ4a+b1J6U1ZfieV+Ev2dPhJ4QEclr4Wh1K6Tn7Vqp+0vn1Ct8g/BRXqEEEFtAsFtDHDEowqRqFUfQCpKK5ZSct2eXOpOo7zdwoooqSAooooAKKKKACiiigCK4tre7tmt7qCKeFxho5VDKw9wa8t8W/s4fCTxcJJJfDMelXb8/atJb7MwPrtHyH8Vr1eiqjJx2ZpTqzpu8HY+J/G37GvinTUkuvA+uW2twjJFpeAW8/0Dfcb8dtfPWv8AhfxD4T1dtM8SaLe6Xdj/AJZXcRTd7qejD3GRX6u1leIPDXh/xVoz6V4j0ez1OzfrDdRBwPcdwfcYNdVPGSWktT06Gb1I6VFdfifnJ8PvjT8QPhtcomg6y8+nA5fTL0mW3b6DOUPupFfYfwv/AGmfA/j9odL1Vx4d1x8KLW7kHkzN/wBMpeAT/stg/WvN/iX+x3E6Tap8MdRMb8sdI1CTKn2jl6j6Pn/er5U13w7rnhbXJdH8RaVdabfRHDQXMZU49R2I9xkVvyUq6utzudLC45XjpL8T9YKK+A/hH+054r8BSwaP4kabxB4eXChJXzc2y/8ATNz94D+634EV9u+D/Gvhrx54Zi17wtqkV9Zvw23h4mxyjqeVYehriq0ZU3rseLisFUw797bub9FFFYnIFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFeXfGH43eGvhNouy4K6hr06E2mlxvgn/AG5D/Anv1PQe2N8ePj5pvws0o6No/lX3im5jzFATlLRT0ll/9lXv9K+B76/17xb4pkvr+e71fV9Qm5c5klmdjgAAfkAPoK68Ph+f3pbHq4DLva/vKukfz/4Bq+OfH/if4ieKJNd8U6k1zMciKIfLFbp/cjXoo/U9STXp/wAH/wBmjxL8RPJ1vxD52heHGwySsmLi7X/pkp6Kf77cegNeufA79luz0RbfxX8SbWO71PiS30d8PFbHqDL2d/8AZ+6Pc9PqEAKoCgADgAVpVxSj7tM6MVmapr2WH6df8jnPBngPwp8P/D66P4U0eCwg48x1+aSZv70jnlj9fwxXSUUVwtt6s8OUnJ3b1CiiikIKKKKACiiigAooooAKKKO9ABRRRQAUUUUAFFFFABXL+OPh74S+ImgNpPirSYryMA+VMPlmgP8Aejccqf0PcGuoopptO6HGTi7xdmfnv8Yf2cPFHw087WNI83XPDYOTdxp+9tR6TIO3+2OPXFedeBPiF4o+HHimPXfC+otbyjAmgb5oblP7kifxD36jsRX6luiyRtG6hlYEFWGQR6V8pfHL9liC9S58W/DCzWG65lutDThJe5aD+63+x0PbHQ99LFKS5Kh7uEzKNReyxHXr/mewfB/42+Gvizof+jMthrsCA3elSPll/wBuM/xp79R0OO/p9fk9peqaz4W8SQ6ppd1daZqtjLlJEykkTjggg/iCD7g198/An49aZ8U9IGkasYbHxVbR5mtgcJdKOssWf1XqPpWNfDcnvR2ObH5e6P7yn8P5HtFFFFcp5QUUUUAFFFFABRRRQAUUUUAFePfHn432Pwq8MCy00w3Xie9Q/ZLZuVgXp50g9B2H8R9ga6b4s/E/SPhV8P59ev8AbPeSZisLLdhribHA9lHVj2HuRX5w+INc17xz40udb1WabUNX1GYZ2qWLMThURR0A4AUe1dWHoc75pbHqZdgvbP2k/hX4kDnX/GPjEsPtmsa1qdx05kluJWP+fYD2FfdvwG/Z8034aafF4h8QxwX3iuZMmT70diCOY4/VuzP36DjrH+zz8B7b4caHH4l8R28cviu7i+bPzCwjI/1af7Z/ib8Bx193qsRiOb3I7F4/MOf91S+H8/8AgBRRRXGeQFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQB8+ftAfs7Wnj+0n8WeEIIrXxRGu6WEYWPUQB0bsJPRu/Q9iPiC0u9a8K+J47m0kutK1jTp8h+Y5YJVPIIPQg8EGv1ir52/aP+AUfjjTZfGnhK0VfElsm64t4xj+0IwOn/AF1A6HuOPSuzD4i3uT2PYy/H8n7mr8P5f8A6r4D/ABtsPiv4WNrfmK18S2KD7ZajgTL086Mf3T3H8J46EV6/X5S+GPE2t+CfGNp4g0K5e01Gyl3ISOD2ZHHdTyCDX6SfCv4laP8AFL4e23iLTCsVwP3V7ZlstbTAcqfUdwe4P1qcTQ9m+ZbGWY4H2D54fC/wO2ooorlPMCiiigAooooAKpavq2naDoF5rWrXUdrY2cTTzzSHARFGSau18bftc/Fk32qr8L9Duv8ARrYrNqzo335eqQ/ReGI9SPStKVN1JcqOjC4d4iooL5nifxg+KGo/FT4jXGvXJkh0+HMGn2jHiCEHgn/abqx/DoBX0T+yx8Dhp9rb/E/xXa/6XMu7SLSVf9Sh/wCW7A/xMPu+g57jHj/7OPwg/wCFl/EM6jq8Bbw5pDLLdbh8tzJ1SD8cZb/Z47iv0LRFjjWNFVVUAKqjAA9AK68TVUF7KB6uY4lUoLDUvn/kLRRRXAeEFFFFABRVTU9V0zRdMl1LWNRtNPs4hmS5u5lijQe7MQBXJ/8AC5vhF/0VHwd/4OLf/wCLoA7eiuI/4XL8Iv8AoqHg/wD8HFv/APF0f8Lm+EX/AEVHwd/4OLf/AOLoA7eiuI/4XL8Ih/zVDwd/4OLf/wCLo/4XN8Iv+io+Dv8AwcW//wAXQB29FcR/wub4RZ/5Kj4O/wDBxb//ABdH/C5fhEf+aoeDv/Bxb/8AxdAHb0VxH/C5fhEP+ao+Dv8AwcW//wAXR/wub4Q/9FR8Hf8Ag4t//i6AO3oriP8Ahc3whzj/AIWj4O/8HFv/APF0f8Ll+EQ/5qh4O/8ABxb/APxdAHb0Vyem/FH4a6zqcWnaR8QfC9/eTHbHb22qQSSOfRVDZJ+ldZQAUUUUAFFFFABRRRQAUUUUAFFFFAHx5+1T8EY7Fp/ih4UstsMjZ1i1hXhGPH2gAdieG98N3NeLfBb4pX3wp+I8GqgySaTdYg1K1U/6yLP3wP765yPxHev0nura3vbKazu4I57eZDHJFINyupGCCO4INfnB8dPhbP8ACv4nz2MCO2iX2650yY8/u88xE/3kJx7jae9ehhqiqR9nM9/LsQq8Hh6vy9P+Afo3p2o2WraRa6np1zHc2l1Es0M0ZyrowyCPwqzXyP8AsifFcsZPhdrVznAa40mSRvxkg/my/wDAvavriuOrTdOTizyMTh3QqODCiiisznCiiigDhvi58QrX4Z/CjUvE0pRrsL5FjC3/AC1uGyEH0HLH2U1+bNlZ654y8bRWVuJNQ1jVrvaCxy0ssjcsfxJJPYZr239rP4ht4p+LC+EbGbdpmgAxuFPEl0w/eH/gIwn13etdh+x38NVnvb34m6pbgpBustM3Dq+P3so+g+QH3avRpJUaXO92fQ4WKweGdaW7/pH0r8NfAemfDf4bad4V00KxgTfcTgYNxM3LyH6np6AAdq62iivPbbd2eBKTk3J7sKKKKRIUUUUAfmv/AMFGPGGt3Hxn0DwP9rlTRrPSkvxbKxCSTySSKXYdyFQAZ6ZPqa+K6+tP+Ch+f+Gr7H/sX7b/ANGzV8l0AFFFFABRRRQAUUUUAFFFFABRRRQA6OR4pVlidkdSGVlOCpHQg9jX7Sfs0+KNX8Z/soeCPEWvXT3Woz2Hlz3DnLSmORogzHuxCAk9zmvxZr9f/wBlrWNO8PfsBeEde1e5W20/T9Murq5mbpHGk8zM34AGgD32ivhrUP8AgpR4Wh1KePTPhdq11aK5EU8+opC0i9iUCNtz6ZNVv+Hluif9Ekv/APwbp/8AGqAPu6ivhH/h5bon/RJL/wD8G6f/ABqp7X/gpV4Ye4Vb34V6tDF/E8OpRyMPoCi5/OgD7noryn4O/tEfDH432cg8HatJHqcCeZcaRfp5V1Ev97bkh1ycblJA74r1agAooooAKKKKACvOvjX8NLb4ofCm80UIi6pb/wCk6bM38Eyjhc/3WGVP1z2r0WinGTi7ouE3CSlHdH5O2F9q/hfxXBf2jy2GqabciRCww0MqN0I9iMEfUV+m/wANvHFj8RPhlpXiux2qbqLE8IP+pmXiRD9Gzj2we9fIX7XPw2Hhv4iw+ONMttuna6SLjaPljulHP/fa/N9Q1W/2PviI2j+PLvwFqFxtsdYHnWgY8JcoOQP99B+aCvQrpVqaqLc9/GwjisMq8N1/TPt2iiivOPnQrlfiR4wg8B/CvW/Fc5XdZWzNCjfxyn5Y1/FitdVXyb+2l4yaHTNA8B20hzcOdSu1B/hXKRg/Vi5/4CK1ow55qJ0YSj7arGB8o2Nnq/i7xjb2NuXu9V1S7EYLcmSWR+SfxJJr9Q/Bvhew8F+AdJ8LaYoFvp9usIYDG9gPmc+7MST9a+Mf2PvBK678XLvxZdRb7bQoMxEjg3EoKr+Shz+Ir7rrfGTvJQ7HoZxXvNUlsgooorjPHCiiigAooooA/Lf/AIKH/wDJ19j/ANi/bf8Ao2avkuvrT/gofn/hq+x/7F+2/wDRs1fJdABRRRQAUUUUAFFFFABRRRQAUUUUAFfqD4KyP+COdyR/0Kmo/wDoyavy+r9QfBYx/wAEc7n/ALFTUf8A0ZNQB+evwh8BxfE743+G/AU2oNp8Wr3YgkukTe0ahSxIBxk4U496+8h/wTc+GoHPxA8VE+yW/wD8RXx7+yZ/yej8P/8AsIn/ANFPX7K0AfFn/Dtz4af9D/4r/wC+Lf8A+Irj/H//AATge18PTXvw18czX2oRKWXT9ahSMT/7KypgKfTK49SOtfoHRQB+GWiav41+Dfxfg1K3S70TxLoF7h4JlKMjqcNG47qwyCOhB96/aH4ZePtI+KHwn0Px1ojAWup2wlMWcmGQcSRt7q4Zfwr4/wD+ChHwWjvNBsvjRoNiBc2hSy1vyl5kiJxDM2O6t8hPoy/3a4v/AIJ9fGcaF43vfg/rl3tsNZY3elGRuI7pV+eMenmIuR7p6tQB+kFFFFABRRRQAUUUUAcR8XPAsPxG+EGseGGRftUkXnWbn+C4T5kP4n5T7Ma/NLStR1Lw54otNTsy9tqGnXSzJngpJG2cH8Rg1+slfnf+014KPg79oDUZ7eER2GsKNSgwMAM5IkX/AL7DH/gQruwc94M9vJ62sqMtnr/mfe3hDxJZ+MPAmk+J7AjyNRtUuFXOdhI+ZT7g5H4VtV8y/saeMf7S+HereDLmbM2kXAuLdSefJlySB7Bw3/fQr6a71y1YcknE8vE0fY1ZQ7BX5rftAeKv+Eu/aF8RX6S+ZbWs/wDZ9vg8bIfkOPqwc/jX6H+L9bTw18P9b8QyEAafYzXIz3KISB+YFfllYWl3r/iS2sY90l5qN0kQPUtJI4GfzaurBR1cj1Mmpq8qj6H39+y14THhn9njTbuWEJdazI+oy8c7W+WMf98Kp/4FXtNU9J0230fQLHSbRQsFnbx28YHZUUKP0FXK45y5pOR5Nao6lSU31YUUUVJkFFFFABRRRQB+W/8AwUP/AOTrrD/sX7b/ANGzV8l19af8FD/+Tr7H/sX7b/0bNXyXQAUUUUAFFFFABRRRQAUUUUAFFFFABX6g+C/+UOdz/wBipqP/AKMmr8vq/UHwUP8AjTpc/wDYqaj/AOjJqAPiT9k3H/DaHw/ycf8AExP/AKKev2Wr8DtM1TUdF1q21bSL64sb+1lWa3ureQpJE6nIZWHIIr0z/hpn4/8A/RXPFX/ga1AH7S96K/Fpf2m/2gFcMPi34pyDkZvCR+VfWX7K/wC2tq3iHxVa/Dv4yahbyz3jCLTfEDIsRaU8LDOBhfm6K+BzgHOcgA+3/Evh7SvFng/U/DOu2q3Om6lbSWtzE38SOpB/HnIPYgV+K/jzwn4m+Bf7QF9oRuJbbVfD+oLNZXqjaXVWDwzL7FdrfmK/byvin/goL8Gx4g8A2Xxd0a1zqGhgWmphBzJaM3yOfXy3b8nPpQB9LfBT4n6d8YPgjofjqwKJLdw+Xe26nP2e5T5ZU/765H+yVPevQK/MX9gH4uTeFfjLP8MdRnP9keJgXtlY8Q3kakqR/voCp9SqV+nVABRRRQAUUUUAFfN37ZPhQan8JNO8VQxZn0e8CSMBz5M3yn8nEf5mvpGuW+JPhxfFvwi8R+HWTc15YSpGP+mgXch/76C1pSlyzTN8LV9lVjPzPhb9mDxSfDP7RmkxSSbLbVkfTZRnglxuj/8AH1UfjX6JV+S+k6lcaN4hsdXgzHcWNzHcp6hkYMP1Ffq9pt9DqmjWmp2zBobqFJ4yO6soYfoa6cbG0lI9POadpxn3/Q8j/am1o6P+zLrUaNtfUJYLFfcNICw/75Vq+Qv2c9FGu/tL+F7d03R20z3z+3lIzj/x4LX0J+2xqTQ/DfwzpCt/x9ak8zD1EcRH85BXnX7GGli5+M2sam65+xaUVU+jSSKP5K1XS92g2a4T93gZz73/AMj7kooorzzwAooooAKKKKACiiigD8tv+Ch3/J19j/2L9t/6Nmr5Mr60/wCCh4/4yvsf+xftv/Rs1fJdABRXR+B/AXi74j+L7fwx4K0K61fU5uRFAvCL3d2PCKO7MQK+zvBP/BN3U7nTo7n4g/EKGwuGALWWj23n7PYyuQCfouPegD4Oor9CfEX/AATX0w6c7eE/iddpdgZWPVLFWjb2LRsCv1wa+PPi18DviL8FfECab440YwwzEi11G2bzbW6A/uSY6/7Jww9KAPOaKKKACiiigAooooAK+1vCf7T/AMOdO/4Jv6j8JtRmvY/Fa6bdaTBZpbsUm853KyiTG0KBJyCQcqcA5FfFNFABRRXuHwW/ZU+KfxrgTVdIsYdH8PFtp1nU9yRSY6+UoBaQj1A29sigDw+lDFW3KcEV+imm/wDBNbwsmnqNX+J+rzXWPma0sI44wfYMzH9a88+JH/BO7xxoGmTal8O/FFp4pWIFjp1zF9kuWHoh3FHPsStAHlOgftm/tEeHfD9ro1n45Fxb2qCOJ76xguJdoGADI6Fm+pJNQeLP2wfj1418Fan4U1/xXazaXqcDW11FHptvGzxt1XcqZGenFeLarpWp6JrNzpOsWFxYX9rIYZ7W5jMckTjqrKeQap0AegfAu7ms/wBpv4f3Nu22RfEFkAfrOoP6E1+3hr8PPgt/ych4B/7GGw/9KEr9wz1oAKKKKACiiigAo+tFFAH5a/EvRP8AhHPjJ4o0QKFS21OdYx6IXLL/AOOkV9//ALP2snXf2a/CV2z7pIrP7I594mMf8lFfHn7VOmf2d+07rDqu1by3t7oe5MYQn80NfRH7HGpm8+Al3YM2TY6tMgHorqjj9WNehiPeoxkfQZh+8wkKnp+RwH7bt2Trng2wzwsF1Nj6tGP6VZ/YhswX8aagRyPskGf+/rH+lYf7a7Z+KHhlCflXS3P5zH/Cuv8A2I0H/CIeMJePmvoF/KNv8aHphv67ky0y5f11PqmiiivPPBCiiigAooooAKKKKAPkf9r/APZV8Q/GvXNL8aeBLuxXXLO1+w3NleyGJbmIMWRkfBAYFmGDgEEcjHPyn/wwZ+0Vn/kA6L/4NYv8a+yP2mP2pvEn7P3jTSdKt/h1FrWmalZ+fFqU160CmUOQ8QARuQNh6/xVg/s/ftnat8b/AI1WvgOX4fWejxyWs91LeR6i0xURrkAKYxnJIHWgD0L4YfD/AOH37Jn7N1xqWu3VtbzW9uLvXdY2ZkuZscRp3KhjsRB1znqSa+Mfif8At+fFjxPrk8Pw+Nv4P0ZWIhxClxdyL2aR3BVSfRQMep616h/wUk8ZX8Gn+CvAVvM6WlyZ9UulBwJGTEcQPrjdIfrik/YX/Z38DeIPhnJ8V/Gui2eu3lxdyW2nWt7GJYLZIyFaQxnhnLbhyDgKMdaAPD/BX7c/x88L6zHca1r9t4psN2ZbLU7aNCw7hZI1VlPoeR7Gvvrwn4s+F37Xv7PF5Bcaf51jcj7NqGm3BBuNOuAMqyt2YfeRx1H4iuK/aq/Zs+Hfin4Fa/4p0Lwzpeh+I9DspNQgu9Ot0txOkSl3ikVAAwKhsE8g45xkH5R/YA8YX+h/tUr4ZjncWGv6fPDNDn5TJEplR8eo2uPoxoAh1n9gT482viK+ttHsdH1DTo53W1u21COJpogx2uUPKkjBI7GqP/DBf7Rf/QB0b/waxf419u/tNftOXP7PN/4chj8Fx6+msxzvva+Nv5RiKDGNjZzv9uleB/8ADy+6/wCiQw/+Dk//ABmgDx7/AIYL/aL/AOgDo3/g1i/xpf8Ahgv9or/oBaL/AODWL/GvYP8Ah5dc/wDRIIf/AAdH/wCM0f8ADy66/wCiQw/+Dk//ABmgDx7/AIYL/aK/6AWi/wDg1i/xpf8Ahgv9or/oBaN/4NYv8a9g/wCHl11/0SGH/wAHJ/8AjNH/AA8vuf8AokMP/g6P/wAZoA8e/wCGC/2iv+gDo3/g1i/xpf8Ahgv9or/oBaL/AODWL/GvYP8Ah5fc/wDRIYf/AAdH/wCM0v8Aw8uuf+iQQ/8Ag6P/AMZoA5n4QfsDePz8WdOuPi3ZafbeFrYme5htb5Znuiv3Yfl5VWPU+gIHJFfTf7RX7THhb9nHw1Y+F/D+kWl/4kmth9g0iP8AdW9lAPlWSTb0XjCoME4PIAzXoPwD+K8/xq+Cll4+n0FNF+13E8K2i3Hn4EblN27avUg8Yr8oviDqWsfGX9rjVTNck3eu+If7PtmkORCjTCGJfoq7ePagDrdZ/bT/AGjtW1c3sfj7+zUJytrYWMCRKPTDIxI+pNe3/An9v3Xv+EltPDnxpjtLnTrhxEPEFrCIZLZjwGmjX5WT1ZQCOuDX1x4E/Zy+D3gHwLD4asvA2iaiBEEub3UrKO5nu2x8zuzgnn+6MAdhX57/ALbPwQ8NfB/4t6Vf+DbcWWi+ILeSddPU5S1mjYCRUzyEIdCB2JIHGBQB9cftZ/sxQfG7w3aeL/AVtYL4zt9iiXzFjj1G2P8AC79Nyg7lY9sjuMfIP/DBf7RX/QC0X/waxf419w/sV+Lr/wAXfsd+Hn1KVpbjS5ZtK81jkskTfu8/RGRf+A14p4l/4KKXPh3xpq/h6T4TRTPpt9NZmUawVD+XIybseTxnbnFAHFfBH9hn4taL8cfD3iTx1/ZWlaPpF7FqEhgvFuJZ2iYOsaqvTLKMkkYGetfpFXyL8DP21dU+NXxp07wFafC3+z4riOWa4vk1MzC2jRC28r5QyC21eo5YV9dUAFFFFABRRRQAUUUUAfDf7aFmsPxp0W8A5uNHUE+6zSD+td3+xJcE+FPF9nnhLy3lx/vRsP8A2SuW/baQDx94Ul7tp8y/lIP8a1v2IZD5vjWPnGLNv/RtehLXDI9+prly/rqYf7bEZHxN8MS9m0uRfylP/wAVXYfsRyKfB3i+IYyt9A35xn/CsX9t2z/4mXg2/C/eiuoc/Qxt/U1N+xDdhX8Z6fnlhaTgf9/VP9KT1w39dxS97Ll/XU+vKKKK4DwQooooAKKKKACiiigDA8Y+CPCXxA8MS+HvGnh+x1rTZDuNvdx7grDoynqrD+8pBrzz4e/sv/Bz4W/EFPGfgnQLvT9USKSFWa/mmQI4ww2uxFexUUAfE3/BRP4a6lrvw88PfEjS7eSdNBkktb9UGSkExUrIfYOuD/vivGv2SP2t9H+Dvh258AePrO8l8PS3DXVpfWaeY9m7Ab1ZMgshIByOQSeDnj9Nr6xs9T0y407UbWG7s7mNoZredA6Sowwysp4IIOMV8T/Ez/gnX4d1rXJtV+GXi0+Ho5nLnS9RhNxBGT2jkBDqvsQ31oA5/wDaU/bg8HeKvhNqfgH4WRahdyaxCbW81W7gNukMDcOkat8zMwyuSAACep6cn/wTy+Gepat8YtR+J9zbOmk6LayWlvMwwJbqUAFV9dsZYn03r611/gv/AIJuNFrcVx8QPiHFPYIwL2ejWzK8o9PNk+7+CmvuHwh4P8N+AvBtj4V8JaVBpmk2SbIbeEcDuWJPLMTyWOSSeaAOK+LX7P3w3+Nl7pd14+stQun0xJI7YW148AUOVLZC9T8o/KvN/wDhgv8AZ1/6AWtf+DWWvpmigD5m/wCGC/2df+gHrX/g1lo/4YL/AGdf+gFrX/g1lr6ZooA+Z/8Ahgv9nX/oBa1/4NZaT/hgv9nX/oB61/4NZa+maKAPmb/hgv8AZ1/6Aetf+DWWj/hgv9nX/oB61/4NZa+maKAOS+G/w38L/CjwBb+DfB0FzBpUEsk0cdxO0zBnbc3zHnGTX5LfH7wTr3wV/aw1mOFZbYpqf9taPdbeHiaTzYmX12t8p90NfstXm/xi+B/gL43eEV0XxlYP50GWs9StSEubRj1KMQQVPGVIIOOmQDQB4Z4J/wCCgnwj1HwLBdeOItW0XX44gLm0t7NriKWQDkwuv8JPQPjGcZPWviz9pb483f7QXxZt9Vs9MmsdF0+L7HpdlJhpSrNlnfGRvc44GcAKOep961X/AIJr+J11dxofxN0iWwLfK17ZSRyqPcKWBP4ivcfgX+xH4D+FGvW3irxHqL+LfEVsQ9u80IitbVx0dIsks47MxOOoAPNAHoH7Lfw5v/hd+y34a8N6tA0Gqyo+oX0TdY5Zm37D7qpVT7qa4zVf2FPgPrWvXusX9v4ie6vbiS6mYakQGd2LNxt45Jr6WooA4D4X/BT4bfB3S5rPwF4bh097gAXF3I7TXE+OgeRiTgf3Rge1d/RRQAUUUUAFFFFABRRRQB8W/ttuD4+8KR910+ZvzkH+Fa/7EEbF/Gs3bFmn/o01yv7Z92J/jZo9mp/499HQn6tLIf6Cu+/YltCng3xbfY4lvoYgf92Mn/2evQl/uy/rqe/U0y5f11L37amlm4+FXh/VlXP2TVDET6CSJv6oK8z/AGMNTFt8Z9Y0xmwL3SSyj1aORT/Jmr6J/aa0X+2v2ZfEQVN0lkI75AO3lyAt/wCOlq+Ov2cdbGh/tLeGJ3fbHdTPYv8A9tUKj/x4rSpe9QkhYT95gZw7X/zP0hooorgPBCiiigAooooAKKK/LXxf+29+0Fo/xC17SbHxBpKWtnqNxbQq2lwsQiSsqgnHPAFAH6lUV+Tf/DeH7Rn/AEMekf8Agph/wqWD9vT9omKZXk1rQ51HVJNKjAP/AHzg/rQB+r9FfBXwo/4KJC91m20j4u+GbWxgmYIda0ffshJ/ikhYk7fUqxI/umvu2wv7LVNLt9S026hu7O5jWaC4hYOkqMMqykcEEEHNAFiiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAPzx/an1Qaj+05rMatuWzgt7X6ERhiPzc19H/se6X9h/Z7e+Iwb/VJ5gfUKFjH6oa+M/iVrg8RfF/xProbKXWpTyI2f4A5C/wDjoFfoT8DNDfw9+zr4R06RNkpsEuJAR/FKTKf/AEOvQxPu0YxPfzD93hIU/T8jsPEOkQ6/4R1TQrgAxX9pLatn0dCv9a/K+3kv/C/i+KY7o77Sr0NgcESRSdPzWv1ir85f2lPCreFv2jdbWOIpbamV1OHjAPmD58f8DD1GClq4vqZZNUXNKm+p+h2kanba14fsdYs2DW95bx3ETDurqGH86uV4l+yt4sHiT9nux0+WXfd6JK+nyAnnYPmjP02sB/wGvba5Jx5ZOJ5Vam6dSUH0CiiipMgooooAB1r8K/iH/wAle8V/9hm8/wDR71+6g61+FfxC/wCSveK/+wzef+j3oA9q/Zz/AGULn9oHwXq/iGHxtFoK6deiyML2JuPMzGr7sh1x97GMV6prf/BNvxVa6LNcaB8S9L1G+RS0drdWD2yynH3fMDvtJ9xivQ/+Cbuf+FJ+MPT+3F/9J0r7T+nWgD8FNY0nUdA8Q32h6vaSWmoWM721zbyD5o5EYqyn6EGv0w/4J7+O77xJ+z5qnhPUZ3mfw3fiK2Z2yVt5l3qn0DiXHoCBXwh+0ZfWWo/tZfEK806ZJrd9cuAsiHKsQ20kfiDX17/wTVs508MfEK/ZSIXurKFW7FlSUkfgGX86APu2iivF/wBo/wDaF0X4A+AINQltF1PxBqTNFpmml9iuVA3SSEciNcjOOSSAO5AB7RRX49eK/wBsH9oTxXqMlw3xAu9HgY5S10ZFtY4x6AqN5/FjWTpn7Un7QWlXKzWvxX8QylTnbdyrcqfqJAwoA/Zuivm/9jb4u/Eb4yfCnWvEPxBlsZ/seoCxtLi2tvIabEYZy4B2n76gYA71v/tH/tJ+HfgF4Wtw9qureJtRVjp+l79q7RwZZSOVjB445Y8DoSAD3Givxx8Z/tZ/H3xpqUtxc/EHUdJgYkpZ6I32KJB6DZ8x/wCBMTWPoX7SHx28Pagt5p/xV8TO6nPl3l411G31SXcpH4UAftNRXyB+y7+2YvxU16DwB8RrWz03xNMpFjf2w2QagwGShUn5JcAkAHDc4wcA+6/tA+Ldd8C/sz+MPFvhm7Fnq2nWQmtbho1kCN5ijO1gQeCeooA9Kor8jf8Aht/9pLlv+E5tvp/ZVr/8br9VfBOo3esfDTw7q+oSCS7vdMtrmdwoXdI8SsxwOByTxQBu0V+av7QH7Wfx18C/tLeL/CPhnxdBaaRp175NrA2nW8hRdinG5kJPJPU179+xJ8Z/iJ8Y/DvjG6+IOtx6nLptzax2rJaxQbFdZCw/dqM5KjrQB9WUV47+0N+0H4b+AXgOLUb+D+0tdv8AdHpeko+wzMuNzu38Ma5GTjJJAHt+bPjX9rr4+eNtTluJfHl9olsxOyy0M/Y44x6ZX52+rMaAP2Ior8TrH9oD436bcCa0+LHi9XHP7zU5ZAfqGJBr2T4Y/twfHew8W6To2t6tpviSzuruK2f+0rNVkVXcKSHi2HPPfNAH6m0UUUAFFFFABXJ/E7xGvhL4PeJPEO/a9rYSmI5/5aMNqf8AjzLXWV81ftleLf7N+GGl+EbeXbPq1350yg8+TDzz9XKf98mtKUeeaidGFpe1qxh5nxp4d0ebxD4x0rQIQZJ9QvIrUY55dwpP6k1+rdrbRWdjDaQKFihjWNFHZQMD+VfAn7J/hY+If2gYNTlh3W2iWz3rsRx5h+SMfXLE/wDAa/QCunGyvJR7HoZzUvUjDsvzCvmH9szwab/wNpHji1izNpc5tLlgOfJl+6T7BwB/wOvp6sLxn4YsvGfgDV/C1+B5Go2r25bH3CR8rD3DYP4VzUp8k1I87C1vY1Yz7HxZ+yJ43Hh/4xzeF7qbbaa9B5agnAFxHlk/Nd6/iK+8K/KN01vwP4+aL57TWdGvsZ6GOaJ+v0yv5V+nPgPxdY+O/hzpPivTyPKvoBIyD/lnIOHQ+6sCPwrpxkNVNdT0c3o2kq0dmdHRRRXEeOFFHeigAHWvwr+IX/JXvFf/AGGbz/0e9fuoOtfhX8Q/+Sv+K/8AsM3n/o96AOy+FX7RfxR+DHh6+0XwHqljaWl9cC6nW4so5yZAoXILDjgDiuq8Qftp/tEeItBm0mbxpFYQzKUkl06xht5Sp6gSBdy/VSDXrn7E/wAA/hT8XPhZ4k1fx/4Y/ta8s9VFtBJ9rmh2RmFGxiNwDyScmuW/bW/Z28N/B/VvDviXwBpL2HhvUkazng855hDdJlgdzkn50PTPWM0AfMOgeHtf8YeKbXQvD2l3mrareyBIba2QySSMe/07kngdSa/YX9mv4On4JfATT/Cd3JFNrE8jX+qSxcqbhwAVU91RVVAe+0nvX5sfsk/FRPhV+01o9/fzLFo+r/8AEp1B26IkrDZJnttkCEn03V+wvHagAr8yf+CjEt+37SHh+Gfd9jTQIzb+hJnl349+F/Sv02rwb9p/9m+x+P3gq0NlfQ6X4o0ne2n3sykxyK2N0MuOdpIBBGSpHQ5IoA/Nn9nRvg0vxtt/+F4xu/htrd1i3eZ5K3GV2Gby/m2Y39OM4zxmv0bsv2b/ANk/4i+GheeGvCHhrULF1+W80S9cFf8AgUUnB+tfml8RPgP8WfhZdSL4x8F6jbWqEgajbp59q49RKmVH0OD7Vyfhbxh4p8EeIItb8I+INR0W/jIInspjGT7MBww9jkGgD9qvhd8MPC3wh+H8fg3wdFcx6ZHcS3I+0y+ZIWkbJy2BnHAHsBX5O/tUeMb3xr+1t40vrqdnhsr99LtUJ4jitz5YA9MkM31Y1+hf7I/7RF18dfh5e2viOKGLxTobRx3rQrtS6jcHZOq/wklWDAcAjIwDgfmP8Yz/AMZFePf+xhv/AP0oegD3P9jv9mXw/wDG+51rxL43nux4f0iVLZLS0k8prudl3EM/VVVdvTBJYcjFepftS/saeAPBnwY1D4h/DKG80ybRwst5p01y9xFPAWCsylyWV1yG64IB4zXa/wDBOMg/s9eJwOo8Qt/6Tw17d+0+cfsefEQ/9QaX+lAH426Tql7omu2Ws6bcPb3tjOlzbyocFJEYMpH0IFfrj+0LrS+JP+Ce3ifxCihV1Lw9b3oUdvMMT4/WvyBPQ1+sHxO/5RUS/wDYm2H/AKBDQB+T5+7X7pfDb/kjHhD/ALAll/6ISvwtP3TX7pfDb/kjHhD/ALAll/6ISgD8kv2rv+TzviD/ANhIf+ikr6q/4Jq8eEPiGf8Ap8sv/QJa+VP2rv8Ak874g/8AYSH/AKKSvqv/AIJqf8ij8Qx/0+2X/oEtAHzX+2R40vfGP7X/AIojmnZ7TRZF0i0jJyI1iHz4+shkP41vfsgfs36P8dfFOsar4uubuLw5oYjSS3tX8t7uaTcVTf1VQFJOOeQBjrXlXx63H9qP4h785/4SG96/9dmr7a/4JtEf8Ko8bjjP9rw/+iaAOS/bC/Zm+EPwr+AMPjDwNoV3pmpDU4LNib6WZHR1cnKuTz8o5GK+K/Bf/JSvDv8A2E7b/wBGrX6Zf8FBv+TRI/8AsPWn/oEtfmb4L/5KV4d/7Cdt/wCjVoA/dw9aKD1ooAKKKKADvX5z/tJeNh41+PuqNbT+bYaVjTLbByD5ZPmMPq5b8AK+1/jX4+T4c/BjVtejkVb+RPslgpP3p5AQp/4CMt9Fr85/Cnh3UPGfj7S/DViWe81K6WHf1IDH5nP0G5j9K7sHC16jPbyiklzV5bL+mfaf7IPg1tC+DE/ia6h2XOvXJlQkc+RHlE/M7z+Ir6GqjoukWWgeHLDQ9OjEdpY26W0KDsqKFH8qvVyVJ88nI8rEVXVqSm+oUUUVBifE/wC2F8Ojo/jSz+IenQEWeq4tr0qOEuFX5WP++g/ND61a/Y++Ji6dr938NtUuNtvfk3WnFzwswH7yMf7yjcPdT619U+P/AAZp3xA+HOq+E9TAEV7CVSXGTDIOUkHurAH9K/Mu+svEHw/+Ic1jOZLHW9GvOHTqksbZVl9QeCPUGvQotVqbpvdH0GDksXh3Qluv6R+rNFcP8JfiLY/E/wCF9h4ltikd2R5N9bKf9ROoG4fQ/eHsRXcVwNNOzPBnBwk4y3QUUUUiQHWvwr+IX/JXvFf/AGGLz/0e9fupX5L+M/2Rf2h9U+JHiHU7H4c3E1rdanczwyC9thvRpWZTgyZGQRQB9K/8E3f+SJeMP+w4v/pOlfQv7Qfwxi+Ln7PPiHwcsStqDwfadOY/wXUfzR4PbJBQ+zGvK/2IPhX49+FPwr8S6V4/0CTR7y81ZbiCJ5o5N8fkou7KMwHII5r6ioA/AqaGW3uJIJ43imjYo6MMMrA4IPoQa/YT9kz4r/8AC2P2adHv72583WtJH9lank5ZpI1G2Q/76FGz67vSvkf9pT9j/wCJ2pftF654h+GHhBtV0LWGGoZhuIYhBO+fNjw7qfvgsMDGHA7V3P7Gfwr+Pnwc+L19aeLfA13Y+FdbtTHdzG7gkWCePLRSbVkJ7unA/jHpQB94V4d8ZP2pPAfwO+I+j+FPF9hqs39o2ZvGurBFl+zrvKLvQkEglW6Z6dK9xr4J/a8/Zh+NXxO+Nt1498J2em6zpgs4LS2so7wRXMSovzZWTapy7OeGPUUAe/Wv7Yn7NmqaW0knxGtIUZSHgu7G4RsehUx81+b/AO0x4k+Fvi39oHUNb+EWnpaaFLBGJTFbm3inuBnzJUjIG1T8vYZIJxzVO6/Zp+P1ncGGb4SeKSw6mKzMq/8AfS5B/Ouo8HfsaftA+LtSihfwTLoFqzASXmtyLbrGPXZkufoFoA9e/wCCbdpev8V/Gt9GrfY49Jihkbt5jTAoPrhHrwj9qnwZeeCP2tvGdhcwskN9fPqlq5HEkVwfMBHrhiy/VTX6f/AH4GaB8BvhiPDel3DX+o3cgudT1J02G5lxgYX+FFHCr9SeSax/2jP2bvDnx+8JwJNcjSfEunq39n6sse4AHkxSr1aMnnjlTyO4IB8M/sf/ALTeifA271nw34zs7yXw7q0iXK3VmnmSWs6rtJKZG5GXaDjkbRwc16f+1H+2d4F8c/Bm++HnwzF/fPq+yO+1G5t2t44YQwYoit8zMxUA8AAZ618/eMP2Qf2gfB+pyW7+AbzWrdSQl5opF3HIPUBfnH/AlFZGifsv/tAa/erbWXwq8QQljgyX8H2SMe5aUqKAPMtG0fUPEPiOw0HSbdri+v7iO1t4lGS8jsFUfmRX7AfG3wdcxfsIeJ/BmnAzS6f4ZWBAo++LeNScfURmvMf2X/2Nbb4TaxD48+IF1a6p4rjU/Y7W2y1vpxIwWDEfvJcEjOAFycZ619ayRRzQvDLGskbqVZGGQwI5BHcUAfgVwRX6Y/CH9uX4O2nwX0HSvG15qWja1plhDZTwrYyTpMYkCB42QHhgoODggkj3ryX47/sG+MNN8V3viH4OW8GsaJcO0w0VpliubMk5KIXIWRB25DAcYOM186XH7Ovx3trn7PN8JPF2/OPk06Rx+YBFAFX45+NNH+In7RHizxroAuBpmqXvnW/2lAkm3Yq5ZQTj7vrX2X/wTV/5FH4h+v2yy/8AQJa+XtE/ZG/aK16ZUt/hlqVorf8ALTUZYrUD6+YwP6V95/sc/APxt8DPCniaHxtPpZudYnt5YoLGczeUI1cEOSoGTvHTPSgD4X/bE8G3ng/9sHxX58BS11iZdXtJMYEiTDLY+kgkH4VufsjftJab8CPFOr6b4psru58N60I2mltFDy2s0eQrhSRuUhiGAOeARnGK+/f2i/2dvDvx98ERWlzcDTPEOnhm0zVQm/y8/ejkHVo2wMjqCMjuD+cvi79jz9oPwlqklr/wgd1rcCnCXmiut1HIPUAYcf8AAlFAHuX7Xv7UXwm+LPwJh8F+Br/Ur+/bUoLxpJbJ4IkRFcEEvgk/MOgPfmvjPwX/AMlK8O/9hO2/9GrXT+K/gX8WfAvgf/hLvGXgnUdD0jz0thNfbI2MjglVCbt3RTzjHFcx4L/5KX4dz/0FLb/0atAH7uHrRQetFABRRXlXx++KcXww+Fc9xaTqNc1Hda6cndWI+aXHogOfqVHeqjFydkXTpyqSUI7s+X/2rPiSPGHxR/4RfTZ9+laAWhJU/LLcn/WN77cBB9G9a7X9jb4debd6h8TNRgO2MNp+nbx1Jx5sg/RAfdq+afCXhjV/Hfj/AE7w3pReW+1G42GVstsB5eRvYDLH6V+n3hXw1png/wAF6b4Y0eIR2enwLDH6tjqx9yck+5Nd2IkqVNU4nu4+ccNQWHhu/wCvxNiiiivPPnwooooAK+W/2tvhGdX0ZfiboNtm9sYxFqkUa8ywD7svuU6H/ZP+zX1JTJoYri3eCeNJIpFKOjjIZSMEEdwRV06jpyUkbYevKhUVSJ+c3wD+LMvws+JCy3sznw/qG2DUYhzsGflmA9UJ/FSR6V+i9tc295ZxXdrMk0EyCSOWNtyupGQQR1BBr88v2g/g3P8AC7x39r0yFj4Z1N2eyk6iBurQMfbqvqvuDXp37LPxySykt/hh4ru9tu526ReStwjE/wDHuxPY/wAJ9fl9K7MRTVSPtYHsY/DxxFNYmj8/68j7EooorgPBCiiigAooooAKKKKACiiigAooooAKKO9FABR3oooAKKKKACiiigAooooAKKKKAPlP/goRn/hkiD/sP2v/AKLmr8z/AAX/AMlK8O/9hO2/9GrX7D/tBfBhPjt8JY/BL+IG0MJfxX32pbfz87Fcbdu5eu/rntXzXo3/AATjt9I8Safqw+LMsps7mK58v+xwN+xw2M+dxnFAH3SetFFBIAyTQBS1jV9O0DQbzWtXuo7Wxs4mmnmkOAigZJr81fi98Sr/AOKXxMuvENzvisY/3FhaueIIAeM/7R+8fc47CvUv2nfjgvjHWJPAfhi63aDYy/6XcRtxezqegPeNT09Tz2FYH7OHwbk+JHjZdc1q3b/hGdKlDT7hxdyjlYR6joW9sDvXo0KapR9pM+gwNCOFpvEVt/6/Fnun7KPwkbwt4Qbx7rtrs1fV4gLSN1+a3tTyD7M5Ab6BfU19IUiqqIERQqgYAAwAKWuGpNzlzM8WvWlWm5y6hRRRUGIUUUUAFFFFAGB408HaH488FX3hjxBbCazu0wSPvxsPuuh7Mp5Br83PiV8O9e+Fnjybw7rCMcHzbO9QEJcxZ+WRT2PqOoP4Gv1Crifih8MfD/xT8ES6DrUflTpmSzvkXMlrLjhh6g9CvcfgR0Yev7N2ex6GAxrw8rS+FnkX7N37QKeLrK38CeM70DxDAm2zvJTj7egH3Sf+eoH/AH0Oeua+k6/LPxp4K8U/DDx7JomtxS2d7bOJbe6hYhZlB+WWJ/Tj6g8HBFfXf7P/AO0hbeL4Lbwd46uo7fxAoEdrfPhUv/QHssv6N254rSvQ+3DY6MdgVb21HWLPpGiiiuM8cKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigA6V8n/tL/ALQItIrv4ceB74G5bMWq6jC3+qHeCMj+I9GI6dOucSftCftKR6el34G+Hd/uvTmK+1iE5WDsY4T3fsWHToOeR8x+AfAHiL4l+NofDvh+3LzSfPPdSAmO3jzzJIfT26k8Cu2hQsueex7WAwKivb19Ev6uy58LvhjrfxV8dRaBpIaG3TEl9elcpaxZ5b3Y9FXufYE1+kXhPwrovgrwdY+GdAtBbWFnHsRerMe7se7E5JPqayfht8OPD/ww8Ew+HtCi3Nw91eOB5l1LjBdv6DoBxXYVliK7qPTY5MfjXiJWXwr+rhRRRXOcAUUUUAFFFFABRRRQAUUUUAcV8TPhh4a+KfhB9F1+DZMmXtL6MDzbWT+8p7g916H8iPz0+I/w08U/C3xadI8QWxCklrS/hz5VyoPDI3YjjK9R+tfqBWF4u8HeHfHPhifQPE+mxX1lKPusMNG3Z0bqrDsRXRRxDp6dD0MFj5Yd8r1j/Wx8sfA/9qWSwjtvCnxPunltxiO21xvmaMdAs/cj/b6jvnrX1/bXVte2cV3Z3EVxbyqHjliYMrqeQQRwRX58/GT9nnxN8MLiXVdNE2seGi2VvkXMlsOyzqOn++OD7Hisz4T/AB58Y/C27W0tpTqmgFsy6Vcudq+rRN1jb9D3Het6lCNVc9I7sRgKeIj7XDP5f1sfo9RXCfDj4u+Cfifpfn+HNSVb1FzPptwQlxD9V/iH+0uRXd1wtOLszw5wlB8slZhRRRSJCiiigAooooAKKKKACiiigAooooAKKKKACiiigAoorzf4n/G7wP8AC2xZdXvftmrMuYdJtCGmb0Ldo192/AGnGLk7IuFOVR8sVdnfajqWn6Rpc+p6peQWdnboXluJ3CJGo7knpXxb8cv2obrxQtz4U+Hk89lorZjudTGUmux0Kp3SM+v3j7Dr5b8UvjV4y+Kupk6vdfZNJjfdb6VbMRDH6Fu8jf7R/ACuh+DP7PHiX4n3MOsamJdG8MBsteOuJLoD+GFT1/3zwPfpXfToRpLnqHuUMDTw0fbYh6/195x/w0+F3if4o+Kl0jw/b7beMg3d/KD5Nqh7se7eijk/TJr9DPht8NfDfwv8HR6F4ftyWOHuryUDzbqT+85/kvQCtbwn4Q8PeB/C9v4f8M6bFY2MI4ROWdu7u3VmPcmtuueviHUduhwY3HyxLstI/wBbhRRRXOeeFFFFABRRRQAUUUUAFFFFABRRRQAUUUUANkjjmheKaNZI3BVkcZDA9QR3FfMfxb/ZM0vW2n1z4atBpV+2Xk0qQ7baY/8ATM/8syfT7v8Au19PUVcKkoO8TahiKlCXNTdj8q9S0nxZ8PvFwtdRttS0DWbV96ElopFx0ZGHUe6nBr6B+G37X+t6SItL+Iti2sWi4UalagJcqPV04WT6jafrX1l4v8DeFPHmiHSvFeiW2owc7DIuJIie6OPmU/Q18n/Eb9jzW9NMuofDnURqtqMt/Zt6wjuF9kk4V/x2n612qvTrK1RWZ7Mcbh8UuXEKz/rqfVPg34i+C/H+nC78KeILS/4y8Cttmi/34zhl/EV1FflJe2PifwX4jEV7banoGq27ZXeHt5kPqDwfxHFexeCf2tPiT4bEdrr32bxNZKAP9MHl3AHtKvX/AIEDUTwb3g7mNbKJJc1F3R980V4R4T/a0+FuvrHDrM174cum4K3sReIH2kTP5kCvY9F8S+HvEdoLnQNc07U4iM77O4WX89p4rllTlH4keXUoVKXxxaNSiiioMgooooAKKKKACiiigAorG13xb4X8L2puPEXiHTdLjAzm7uFjJ+gJyfwrxnxZ+138M9DWSHQEv/EdyvANvH5MOfeRwDj6KauNOUvhRtTw9Sr8EWz3+uO8b/FLwL8PLMzeKfEFtazFdyWaHzLiT/djXn8Tge9fFvjf9qr4neKvMtdLuYPDVi2QI9OyZiPeZuf++dteR2Gm+IfF3iH7NpdnqGtapcNkrCjTyuT3Y8n8TXVDBvebsepRyeXxVnZHvvxL/a48U+I1n0rwHbN4d09sr9skIe7kHqD92P8ADJ9xXg+i6F4m8b+KP7O0exvta1W4YuwTMjsT1d2PQerMcV9EfDn9jvXdSeHUfiPqI0m14b+zbJxJcOPR35VPw3H6V9Y+EPA3hPwHog0rwnoltp1vxvaNcySn+87n5mPuTVuvTpLlpq5tPG4fCrkoK7/rqeA/CP8AZL0zQzb678Smg1XUFw6aVEd1tCe3mH/lqfb7v+9X07HFHDCkUUaRxooVUQYCgdAB2FOorinUlN3kzxa2IqVpc1R3CiiioMQooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigDG8R+E/DPi/Sjp3ifQ7HVbY9Euog+33U9VPuCK+fPGf7GnhTUTJc+CdcutEmPItbsG5g+gOQ6/m1fTlFXCpKHws3o4mrR+CVj86fFP7NXxd8Kl5D4d/tm1XP7/AEh/PyPXZw//AI7XmDrq+g6rtdL7S72M9GD28qn9CK/WWs7VtA0LX7U22uaNYalCRjZd26Sj/wAeBrqjjX9pXPTp5zLapG5+ceifHf4ueHwosPHmqSRrwI7xluV/8iAmu+0r9sP4p2ahb6z0DUgOpltniY/ijgfpX0prX7M/wZ1rcx8IpYSH+PTriSDH/AQdv6VwmpfsXeBJizaT4o1+xz0WXypwP/HVP61ftqEviRr9cwVT44W+X+Rx9p+2zrKgf2h4BsJD3MF86foUNaaftt2+3978Opd3+zqQI/WOqt5+xHOCTp3xEjbuBcabj9VkrKl/Yo8W7v3XjfRWH+1bSr/jR/sz/phbLn/TN5/224ShMXw6kz/t6kP6R1j3f7bWvvn7B4E0yH0M948n8lWoo/2KvFhOJfG+iqP9m2lb/CtWz/YklJB1D4hxqO4t9Oz+rSUf7Mv6Yf8ACcv6Zw2q/tgfFm+DLYLoWlg9DBaGRh+MjEfpXn2t/G/4s+IlZNS8d6v5bdY7WQWy/lGFr6f0z9i3wFbsDqvifX7491i8qAH/AMdY/rXeaJ+zP8GdEwy+EU1CQfx6jPJPn/gJO39KPb0I/Cg+u4Kn8EL/AC/zPzxjj1TW9R2wR3epXkh6IrTSMfwyTXp/hX9mz4u+K2SVPDZ0i1fH+kau/wBnAHrs5c/981+hGkeHtB8P2wt9C0XT9MixjZZ26RD/AMdArSqJY2X2UZVM5k9KcbHzD4M/Yz8L6f5dz441251qYctaWYNtBn0Lcuw/Fa+hPDfhDwv4P0sad4X0Gx0q37paxBS3uzdWPuSa2u1Fc06sp/EzzK2Jq1vjlcKKKKzMAoo70UAFFFFABRRRQAUUUUAFFFFAH//Z" alt="شعار RSOUQ">
+      <div class="lh-text">
+        <span class="lh-brand ltr">RSOUQ</span>
+        <span class="lh-co"><span class="ltr">TOYLII LLC</span> · وايومنغ، الولايات المتحدة · رقم التسجيل <span class="ltr">2022-001169449</span></span>
+        <span class="lh-co ltr">rsouq.com</span>
+      </div>
+      <span class="lh-tag">سري · CONFIDENTIAL</span>
+    </header>
+    <h2>اتفاقية عدم إفصاح وسرية معلومات (NDA)</h2>
+    <div class="sub">مشروع RSOUQ – شركة TOYLII LLC</div>
+    <p class="dateline">تم إبرام هذه الاتفاقية بتاريخ: <span class="fill" id="d-date">____ / ____ / ______</span></p>
+
+    <h3>أولًا: أطراف الاتفاقية</h3>
+    <p><strong>الطرف الأول – الشركة المالكة والمشغّلة لمشروع RSOUQ</strong></p>
+    <dl class="meta">
+      <dt>الاسم القانوني:</dt><dd><span class="ltr">TOYLII LLC</span></dd>
+      <dt>ولاية التسجيل:</dt><dd>وايومنغ (<span class="ltr">Wyoming</span>)</dd>
+      <dt>رقم تسجيل الشركة:</dt><dd><span class="ltr">2022-001169449</span></dd>
+      <dt>العلامة التجارية:</dt><dd><span class="ltr">RSOUQ</span></dd>
+      <dt>الموقع الإلكتروني:</dt><dd><span class="ltr">https://rsouq.com</span></dd>
+    </dl>
+    <p>ويُشار إليها فيما بعد بـ "الطرف الأول" أو "الشركة".</p>
+
+    <p><strong>الطرف الثاني – المستثمر المحتمل</strong></p>
+    <dl class="meta">
+      <dt>الاسم الكامل / اسم الشركة:</dt><dd><span class="fill" id="d-name"></span></dd>
+      <dt>رقم الهوية / السجل التجاري:</dt><dd><span class="fill" id="d-id"></span></dd>
+      <dt>العنوان:</dt><dd><span class="fill" id="d-addr"></span></dd>
+      <dt>رقم الهاتف:</dt><dd><span class="fill" id="d-phone"></span></dd>
+    </dl>
+    <p>ويُشار إليه فيما بعد بـ "الطرف الثاني" أو "المستثمر".</p>
+
+    <h3>المادة الأولى: الغرض من الاتفاقية</h3>
+    <p>نظرًا لرغبة الطرف الثاني في دراسة فرصة استثمارية محتملة في مشروع RSOUQ، الذي تديره وتشغّله شركة TOYLII LLC، فقد يطلع الطرف الثاني على معلومات تجارية ومالية وتسويقية وتقنية واستراتيجية غير متاحة للجمهور.</p>
+    <p>وتهدف هذه الاتفاقية إلى حماية المعلومات التي يكشف عنها الطرف الأول، وضمان عدم استخدامها إلا لغرض تقييم فرصة الاستثمار المحتملة.</p>
+
+    <h3>المادة الثانية: تعريف المعلومات السرية</h3>
+    <p>تشمل المعلومات السرية، على سبيل المثال لا الحصر:</p>
+    <ol>
+      <li>نموذج العمل والخطط التشغيلية والاستراتيجية للمشروع.</li>
+      <li>المعلومات المالية والتكاليف والإيرادات والأرباح والتوقعات المستقبلية.</li>
+      <li>خطط التسويق والتوسع واستراتيجيات استقطاب العملاء.</li>
+      <li>بيانات الموردين والشركاء والعملاء وشروط التعامل التجاري معهم.</li>
+      <li>المعلومات المتعلقة بالمنصة الإلكترونية والأنظمة التقنية وقواعد البيانات والبرمجيات.</li>
+      <li>خطط تطوير المنتجات والخدمات والأسواق المستهدفة.</li>
+      <li>العروض الاستثمارية وتقييم الشركة ونسب الاستثمار المقترحة وشروط التمويل.</li>
+      <li>أي معلومات أخرى يتم الكشف عنها بصورة مكتوبة أو شفهية أو إلكترونية، وتُعد سرية بحكم طبيعتها أو ظروف الإفصاح عنها.</li>
+    </ol>
+
+    <h3>المادة الثالثة: التزامات المستثمر</h3>
+    <p>يتعهد الطرف الثاني بما يلي:</p>
+    <ol>
+      <li>المحافظة على سرية المعلومات التي يحصل عليها من الطرف الأول.</li>
+      <li>عدم مشاركة المعلومات السرية مع أي شخص أو جهة دون موافقة خطية مسبقة من الطرف الأول، باستثناء المستشارين القانونيين والماليين الذين يحتاجون إليها لتقييم الاستثمار، بشرط التزامهم بالسرية.</li>
+      <li>عدم استخدام المعلومات السرية لأي غرض آخر غير دراسة الاستثمار المحتمل في RSOUQ.</li>
+      <li>عدم استخدام المعلومات السرية لإنشاء أو تطوير مشروع منافس أو لتحقيق منفعة تجارية مستقلة.</li>
+      <li>عدم استغلال علاقات الموردين أو الشركاء أو العملاء التي اطلع عليها حصريًا من خلال المشروع للالتفاف على الشركة أو الإضرار بمصالحها.</li>
+      <li>اتخاذ التدابير المعقولة لحماية المعلومات ومنع الوصول غير المصرح به إليها.</li>
+    </ol>
+
+    <h3>المادة الرابعة: استثناءات السرية</h3>
+    <p>لا تسري التزامات السرية على المعلومات التي يثبت الطرف الثاني أنها:</p>
+    <ol>
+      <li>أصبحت متاحة للعامة دون مخالفته لهذه الاتفاقية.</li>
+      <li>كانت بحوزته بصورة قانونية قبل الإفصاح عنها.</li>
+      <li>حصل عليها بصورة مشروعة من طرف ثالث غير ملزم بالسرية.</li>
+      <li>طورها بصورة مستقلة دون الاعتماد على المعلومات السرية للطرف الأول.</li>
+    </ol>
+    <p>وفي حال وجود التزام قانوني بالإفصاح، يقتصر الإفصاح على القدر المطلوب نظامًا.</p>
+
+    <h3>المادة الخامسة: ملكية المعلومات والحقوق</h3>
+    <p>تبقى جميع المعلومات والمستندات والأصول والحقوق الفكرية والتجارية المتعلقة بمشروع RSOUQ ملكًا لشركة TOYLII LLC أو لأصحاب الحقوق المعنيين بها.</p>
+    <p>ولا تمنح هذه الاتفاقية المستثمر أي حق ملكية أو ترخيص أو صلاحية لاستغلال هذه الحقوق خارج نطاق دراسة الاستثمار.</p>
+
+    <h3>المادة السادسة: مدة الاتفاقية</h3>
+    <p>تسري هذه الاتفاقية اعتبارًا من تاريخ توقيعها.</p>
+    <p>ويستمر التزام الطرف الثاني بالمحافظة على السرية لمدة ثلاث سنوات من تاريخ آخر إفصاح عن المعلومات السرية.</p>
+    <p>أما الأسرار التجارية التي تتمتع بحماية قانونية، فيستمر الالتزام بسرّيتها ما دامت محتفظة بطبيعتها السرية وفقًا للأنظمة المعمول بها.</p>
+
+    <h3>المادة السابعة: إعادة المعلومات وإتلافها</h3>
+    <p>يلتزم الطرف الثاني، عند طلب الطرف الأول، بإعادة أو إتلاف الملفات والمستندات السرية خلال عشرة أيام عمل، باستثناء النسخ التي يتعين الاحتفاظ بها قانونًا، والتي تبقى خاضعة لالتزامات السرية.</p>
+
+    <h3>المادة الثامنة: عدم الالتزام بإتمام الاستثمار</h3>
+    <p>يقر الطرفان بأن هذه الاتفاقية لا تشكل عقد استثمار أو وعدًا بالاستثمار أو التزامًا بنقل أي حصص أو أسهم أو حقوق ملكية في شركة TOYLII LLC أو مشروع RSOUQ.</p>
+    <p>ويخضع أي استثمار أو شراكة مستقبلية لاتفاقية منفصلة يتم التفاوض عليها وتوقيعها بصورة مستقلة.</p>
+
+    <h3>المادة التاسعة: الإخلال بالاتفاقية</h3>
+    <p>في حال مخالفة الطرف الثاني لالتزامات السرية، يحق للطرف الأول اتخاذ الإجراءات القانونية المناسبة والمطالبة بالتعويض عن الأضرار المثبتة الناتجة عن المخالفة، وفقًا للقانون المطبق.</p>
+
+    <h3>المادة العاشرة: القانون والاختصاص القضائي</h3>
+    <p>تخضع هذه الاتفاقية لأنظمة المملكة العربية السعودية، وتختص المحاكم السعودية المختصة نظامًا بالفصل في النزاعات الناشئة عنها، وذلك مع مراعاة القواعد القانونية الآمرة واجبة التطبيق.</p>
+
+    <h3>المادة الحادية عشرة: أحكام عامة</h3>
+    <ol>
+      <li>لا يجوز تعديل الاتفاقية إلا بموافقة كتابية من الطرفين.</li>
+      <li>لا يؤثر بطلان أي بند على سريان بقية البنود، متى أمكن ذلك قانونًا.</li>
+      <li>يجوز توقيع الاتفاقية إلكترونيًا وفقًا للقوانين المعمول بها.</li>
+      <li>يقر الطرفان بقراءة وفهم الاتفاقية وقبول شروطها.</li>
+    </ol>
+
+    <h3>التوقيعات</h3>
+    <div class="sigs">
+      <div class="sigbox">
+        <h4>الطرف الأول – TOYLII LLC / RSOUQ</h4>
+        <div class="small">الصفة: الممثل المفوض للشركة</div>
+        <div class="small">الاسم: <span id="c-name">—</span></div>
+        <div class="sigimg" id="c-sig"><span class="ph">بانتظار توقيع الشركة</span></div>
+        <div class="small">التاريخ: <span id="c-date">—</span></div>
+      </div>
+      <div class="sigbox">
+        <h4>الطرف الثاني – المستثمر</h4>
+        <div class="small">الاسم: <span id="s-name">—</span></div>
+        <div class="small">رقم الهوية / السجل التجاري: <span id="s-id">—</span></div>
+        <div class="sigimg" id="s-sig"><span class="ph">التوقيع</span></div>
+        <div class="small">التاريخ: <span id="s-date">—</span></div>
+      </div>
+    </div>
+    <div class="proof" id="proof" hidden></div>
+    <footer class="sheet-foot"><span><b class="ltr">RSOUQ</b> · علامة تجارية لشركة <span class="ltr">TOYLII LLC</span></span><span class="ltr">rsouq.com</span></footer>
+  </article>
+
+  <!-- Investor -->
+  <section class="panel" id="signPanel">
+    <h2>توقيع المستثمر</h2>
+    <p class="hint">اقرأ الاتفاقية أعلاه، ثم أدخل بياناتك ووقّع. بعد التوقيع تحصل على نسخة PDF موقّعة، أرسلها إلى الشركة.</p>
+    <div class="grid">
+      <label class="f">الاسم الكامل / اسم الشركة<input type="text" id="i-name" autocomplete="name" required></label>
+      <label class="f">رقم الهوية / السجل التجاري<input type="text" id="i-id" required></label>
+      <label class="f">العنوان<input type="text" id="i-addr" autocomplete="street-address"></label>
+      <label class="f">رقم الهاتف<input type="tel" id="i-phone" autocomplete="tel" dir="ltr"></label>
+    </div>
+    <div class="padwrap">
+      <div class="padhead"><span>ارسم توقيعك بإصبعك أو بالماوس</span><button type="button" class="link" id="i-clear">مسح</button></div>
+      <canvas class="pad" id="i-pad" tabindex="0" aria-label="لوحة توقيع المستثمر"></canvas>
+    </div>
+    <label class="check"><input type="checkbox" id="i-agree"><span>قرأت الاتفاقية وفهمتها وأوافق على جميع شروطها، وأقر بأن توقيعي الإلكتروني هذا ملزم لي كتوقيعي الخطي.</span></label>
+    <div class="btns"><button type="button" class="primary" id="i-sign">توقيع الاتفاقية</button></div>
+    <p class="msg" id="i-msg"></p>
+  </section>
+
+  <!-- After signing -->
+  <section class="panel" id="donePanel" hidden>
+    <h2>تم التوقيع</h2>
+    <p class="hint">احفظ النسخة الموقّعة أو شاركها مباشرة، وأرسلها إلى الشركة على واتساب. النسخة لا تُرسل تلقائيًا.</p>
+    <div class="btns">
+      <button type="button" class="primary" id="dl-pdf">حفظ نسخة PDF</button>
+      <button type="button" id="dl-share" hidden>مشاركة عبر واتساب</button>
+      <button type="button" id="dl-png">حفظ كصورة</button>
+    </div>
+    <p class="msg" id="dl-msg"></p>
+    <div class="preview" id="preview" hidden>
+      <p class="hint">إن لم يعمل الحفظ على جهازك، اضغط مطوّلًا على الصورة واحفظها:</p>
+      <img id="previewImg" alt="نسخة الاتفاقية الموقّعة">
+    </div>
+  </section>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const fmtDate = d => String(d.getDate()).padStart(2,'0')+' / '+String(d.getMonth()+1).padStart(2,'0')+' / '+d.getFullYear();
+
+  // ---------- signature pad ----------
+  function makePad(canvas){
+    const ctx = canvas.getContext('2d'); let drawing=false, empty=true, last=null;
+    function size(){
+      const r = canvas.getBoundingClientRect(), dpr = window.devicePixelRatio||1;
+      const old = empty ? null : canvas.toDataURL();
+      canvas.width = Math.round(r.width*dpr); canvas.height = Math.round(r.height*dpr);
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      ctx.lineWidth=2.4; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.strokeStyle='#0d1f3c';
+      if(old){ const im=new Image(); im.onload=()=>ctx.drawImage(im,0,0,r.width,r.height); im.src=old; }
+    }
+    const pos = e => { const r=canvas.getBoundingClientRect(); return {x:e.clientX-r.left,y:e.clientY-r.top}; };
+    canvas.addEventListener('pointerdown',e=>{ if(canvas.dataset.locked) return; drawing=true; canvas.setPointerCapture(e.pointerId); last=pos(e); ctx.beginPath(); ctx.arc(last.x,last.y,1.1,0,Math.PI*2); ctx.fillStyle='#0d1f3c'; ctx.fill(); empty=false; });
+    canvas.addEventListener('pointermove',e=>{ if(!drawing) return; const p=pos(e); const mid={x:(last.x+p.x)/2,y:(last.y+p.y)/2}; ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.quadraticCurveTo(last.x,last.y,mid.x,mid.y); ctx.lineTo(p.x,p.y); ctx.stroke(); last=p; });
+    const end=()=>{drawing=false;}; canvas.addEventListener('pointerup',end); canvas.addEventListener('pointercancel',end);
+    size(); let t; window.addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(size,150);});
+    return {
+      isEmpty:()=>empty,
+      clear(){ const r=canvas.getBoundingClientRect(); ctx.clearRect(0,0,r.width,r.height); empty=true; },
+      // trimmed transparent PNG of the strokes
+      image(){
+        const w=canvas.width,h=canvas.height,d=ctx.getImageData(0,0,w,h).data;
+        let x0=w,y0=h,x1=0,y1=0;
+        for(let y=0;y<h;y++)for(let x=0;x<w;x++){ if(d[(y*w+x)*4+3]>0){ if(x<x0)x0=x; if(x>x1)x1=x; if(y<y0)y0=y; if(y>y1)y1=y; } }
+        if(x1<=x0) return canvas.toDataURL('image/png');
+        const pad=8, c=document.createElement('canvas'); c.width=x1-x0+pad*2; c.height=y1-y0+pad*2;
+        c.getContext('2d').drawImage(canvas,x0-pad,y0-pad,c.width,c.height,0,0,c.width,c.height);
+        return c.toDataURL('image/png');
+      }
+    };
+  }
+  const putSig = (box,src) => { box.textContent=''; const im=new Image(); im.alt='توقيع'; im.src=src; box.appendChild(im); };
+
+  // ---------- investor flow ----------
+  const ipad = makePad($('i-pad'));
+  $('i-clear').onclick = () => ipad.clear();
+  const mirror = [['i-name','d-name'],['i-id','d-id'],['i-addr','d-addr'],['i-phone','d-phone']];
+  mirror.forEach(([a,b])=>{ $(a).addEventListener('input',()=>{ const v=$(a).value.trim(); $(b).textContent=v; $(b).classList.toggle('on',!!v); }); });
+
+  let signedCanvas=null, signerName='';
+  async function sha256(s){ try{ const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''); }catch(e){ return ''; } }
+
+  $('i-sign').onclick = async () => {
+    const msg=$('i-msg'); msg.className='msg';
+    const name=$('i-name').value.trim(), idn=$('i-id').value.trim();
+    if(!name||!idn){ msg.className='msg err'; msg.textContent='أدخل الاسم ورقم الهوية أو السجل التجاري قبل التوقيع.'; return; }
+    if(ipad.isEmpty()){ msg.className='msg err'; msg.textContent='ارسم توقيعك في المربع قبل المتابعة.'; return; }
+    if(!$('i-agree').checked){ msg.className='msg err'; msg.textContent='ضع علامة على الإقرار بالموافقة على الشروط.'; return; }
+    $('i-sign').disabled=true; msg.textContent='جارٍ تجهيز النسخة الموقّعة…';
+
+    const now=new Date(), ds=fmtDate(now);
+    signerName=name;
+    $('d-date').textContent=ds; $('d-date').classList.add('on');
+    $('s-name').textContent=name; $('s-id').textContent=idn; $('s-date').textContent=ds;
+    putSig($('s-sig'), ipad.image());
+
+    const iso=now.toISOString(), tz=Intl.DateTimeFormat().resolvedOptions().timeZone||'';
+    const body=$('sheet').innerText;
+    const hash=await sha256(body+'|'+iso);
+    const proof=$('proof');
+    proof.innerHTML='';
+    [['وقت التوقيع', now.toLocaleString('ar',{dateStyle:'long',timeStyle:'medium'})+' ('+tz+') · '+iso],
+     ['طريقة التوقيع','توقيع إلكتروني مرسوم مع إقرار صريح بالموافقة على جميع الشروط'],
+     ['بصمة المستند (SHA-256)', hash||'غير متاحة في هذا المتصفح']].forEach(([k,v])=>{
+      const d=document.createElement('div'); d.append(k+': '); const s=document.createElement('span'); s.className='ltr'; s.textContent=v; d.append(s); proof.append(d); });
+    proof.hidden=false;
+
+    [...document.querySelectorAll('#signPanel input')].forEach(x=>x.disabled=true);
+    $('i-pad').dataset.locked='1'; $('i-clear').disabled=true;
+    $('status').textContent='موقّعة من المستثمر'; $('status').classList.add('done');
+
+    try{
+      if(document.fonts&&document.fonts.ready) await document.fonts.ready;
+      signedCanvas = await html2canvas($('sheet'),{scale:2,backgroundColor:'#ffffff',useCORS:true});
+      $('previewImg').src = signedCanvas.toDataURL('image/jpeg',0.9);
+    }catch(e){ signedCanvas=null; }
+    $('signPanel').hidden=true; $('donePanel').hidden=false;
+    $('donePanel').scrollIntoView({behavior:'smooth',block:'start'});
+    if(!signedCanvas){ $('dl-msg').className='msg warn'; $('dl-msg').textContent='تعذّر إنشاء الملف تلقائيًا. التقط لقطة شاشة للاتفاقية أعلاه وأرسلها.'; $('dl-pdf').disabled=true; $('dl-png').disabled=true; }
+  };
+
+  function buildPdf(){
+    const { jsPDF } = window.jspdf;
+    const pdf=new jsPDF({orientation:'p',unit:'mm',format:'a4'});
+    const pw=210, ph=297, m=8, iw=pw-m*2, ih=ph-m*2;
+    const pxPerMm=signedCanvas.width/iw, sliceH=Math.floor(ih*pxPerMm);
+    for(let y=0, page=0; y<signedCanvas.height; y+=sliceH, page++){
+      const h=Math.min(sliceH, signedCanvas.height-y);
+      const c=document.createElement('canvas'); c.width=signedCanvas.width; c.height=h;
+      const cx=c.getContext('2d'); cx.fillStyle='#fff'; cx.fillRect(0,0,c.width,h); cx.drawImage(signedCanvas,0,y,c.width,h,0,0,c.width,h);
+      if(page) pdf.addPage();
+      pdf.addImage(c.toDataURL('image/jpeg',0.92),'JPEG',m,m,iw,h/pxPerMm);
+    }
+    return pdf.output('blob');
+  }
+  const safeName = () => 'RSOUQ-NDA-'+(signerName.replace(/[^\p{L}\p{N}]+/gu,'-').replace(/^-|-$/g,'')||'signed');
+
+  async function makeFile(kind){
+    if(kind==='pdf') return new File([buildPdf()], safeName()+'.pdf', {type:'application/pdf'});
+    const blob=await new Promise(r=>signedCanvas.toBlob(r,'image/png'));
+    return new File([blob], safeName()+'.png', {type:'image/png'});
+  }
+  async function save(kind){
+    const msg=$('dl-msg'); msg.className='msg'; msg.textContent='';
+    try{
+      const f=await makeFile(kind);
+      const url=URL.createObjectURL(f), a=document.createElement('a');
+      a.href=url; a.download=f.name; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url),60000);
+      msg.className='msg ok'; msg.textContent='تم تنزيل الملف. أرسله إلى الشركة على واتساب.';
+    }catch(e){ msg.className='msg warn'; msg.textContent='تعذّر التنزيل. احفظ الصورة أدناه وأرسلها.'; $('preview').hidden=false; }
+  }
+  async function share(){
+    const msg=$('dl-msg'); msg.className='msg'; msg.textContent='';
+    try{
+      const f=await makeFile('pdf');
+      await navigator.share({files:[f], title:'اتفاقية سرية RSOUQ موقّعة', text:'مرفق اتفاقية عدم الإفصاح الموقّعة – RSOUQ'});
+    }catch(e){ if(!e||e.name!=='AbortError'){ msg.className='msg warn'; msg.textContent='المشاركة غير متاحة هنا. استعمل «حفظ نسخة PDF» ثم أرسل الملف.'; } }
+  }
+  try{ const t=new File([new Blob(['x'])],'t.pdf',{type:'application/pdf'}); if(navigator.canShare&&navigator.canShare({files:[t]})){ $('dl-share').hidden=false; $('dl-share').onclick=share; } }catch(e){}
+  $('preview').hidden=false;
+  $('dl-pdf').onclick=()=>save('pdf');
+  $('dl-png').onclick=()=>save('png');
+
+})();
+</script>
+
+</body>
+</html>
